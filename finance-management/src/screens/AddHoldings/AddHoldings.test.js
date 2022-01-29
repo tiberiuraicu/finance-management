@@ -1,4 +1,4 @@
-import AddNewTransaction from "./AddNewTransaction.js";
+import AddNewTransaction from "./AddHoldings.js";
 import { shallow } from 'enzyme';
 
 describe('AddNewTransaction screen tests', () => {

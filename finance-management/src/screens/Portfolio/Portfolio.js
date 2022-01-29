@@ -10,7 +10,7 @@ const Portfolio = ({ navigation }) => {
       <Text style={styles.portofolioValueText}>Portfolio value</Text>
       <CustomButton
         onPress={() => {
-          navigation.navigate("AddNewTransaction");
+          navigation.navigate("AddHoldings");
         }}
         text="ADD HOLDINGS"
       ></CustomButton>
