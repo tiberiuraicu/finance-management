@@ -15,7 +15,7 @@ const TextInputCustom = (props) => {
 const styles = StyleSheet.create({
   textInput: {
     borderRadius: 10,
-    height: "10%",
+    height: "14%",
     color: "#212121",
     borderWidth: 1,
     fontSize: 18,

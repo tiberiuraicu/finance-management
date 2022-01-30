@@ -1,9 +1,8 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
- 
   inputContainer: {
-    paddingTop: "10%",
+    paddingTop: "15%",
     marginTop: "20%",
     marginLeft: "5%",
     marginRight: "5%",

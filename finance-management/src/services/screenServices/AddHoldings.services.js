@@ -1,12 +1,12 @@
 import * as storage from "../storage/asyncStorage.js";
-import { PORTFOLIO } from "../../constants/constants.js";
+import { PORTFOLIO } from "../../util/constants/constants.js";
 
 // @info : adds a new holding to the user's portfolio
 // @param :
 //      - transaction : json object which contains the price and the number of shares bought
 //      - symbol : share symbol
 export const addHoldings = async (transaction, symbol) => {
-  if (transactionIsValid(transaction,symbol))
+  if (transactionIsValid(transaction, symbol))
     try {
       var portfolio = {};
       var share = {
@@ -38,7 +38,7 @@ export const addHoldings = async (transaction, symbol) => {
   else return false;
 };
 
-const transactionIsValid = (transaction,symbol) => {
+const transactionIsValid = (transaction, symbol) => {
   if (
     symbol !== undefined &&
     symbol !== null &&
@@ -48,4 +48,39 @@ const transactionIsValid = (transaction,symbol) => {
   )
     return true;
   else return false;
+};
+
+export const inputValidator = (
+  valueToBeTested,
+  inputProperties,
+  setInputProperties
+) => {
+  // regex which allows just numbers and "."
+  const re = /^[0-9]*\.?[0-9]*$/;
+  if (valueToBeTested === "") {
+    inputProperties = {
+      ...inputProperties,
+      validation: false,
+      errorMessage: "This field cannot be empty",
+    };
+  } else if (valueToBeTested <= 0) {
+    inputProperties = {
+      ...inputProperties,
+      validation: false,
+      errorMessage: "Number should be bigger than 0",
+    };
+  } else if (!re.test(valueToBeTested)) {
+    inputProperties = {
+      ...inputProperties,
+      validation: false,
+      errorMessage: "Only numbers accepted",
+    };
+  } else {
+    inputProperties = {
+      ...inputProperties,
+      validation: true,
+      errorMessage: "",
+    };
+  }
+  setInputProperties({ ...inputProperties, value: valueToBeTested });
 };

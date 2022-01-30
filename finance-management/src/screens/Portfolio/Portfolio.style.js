@@ -16,6 +16,5 @@ export default StyleSheet.create({
     alignSelf: "center",
     color: "white",
     marginTop: "5%",
-
   },
 });

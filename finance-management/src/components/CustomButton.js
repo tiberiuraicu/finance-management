@@ -11,7 +11,7 @@ const CustomButton = (props) => {
 const styles = StyleSheet.create({
     button: {
         width: "80%",
-        height:"10%",
+        height:"14%",
         backgroundColor: "black",
         borderRadius: 10,
         justifyContent: "center",

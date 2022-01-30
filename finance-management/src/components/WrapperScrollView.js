@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, ScrollView, View } from "react-native";
-import { BACKGROUND_COLOR } from "../constants/styleConstants";
+import { BACKGROUND_COLOR } from "../util/constants/styleConstants";
 
 const WrapperScrollView = (props) => {
   return (
