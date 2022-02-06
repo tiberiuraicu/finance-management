@@ -8,6 +8,7 @@ const TextInputCustom = (props) => {
       style={{ ...styles.textInput, ...props.style }}
       placeholderTextColor="#788793"
       placeholder={props.placeholder}
+      contextMenuHidden={true}
     />
   );
 };

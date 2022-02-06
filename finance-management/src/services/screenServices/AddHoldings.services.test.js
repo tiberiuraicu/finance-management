@@ -1,10 +1,14 @@
 jest.mock("../storage/asyncStorage", () => ({
   getItem: jest.fn(),
+  setItem: jest.fn(),
   updateItem: jest.fn(),
 }));
-import { addHoldings, inputValidator } from "./AddHoldings.services.js";
+import {
+  addHoldings,
+  getShareNamesAndSymbolsForSearchTerm,
+} from "./AddHoldings.services.js";
 
-import { getItem, updateItem } from "../storage/asyncStorage";
+import { getItem, updateItem,setItem } from "../storage/asyncStorage";
 
 describe("addHoldings method tests", () => {
   beforeEach(() => {
@@ -54,7 +58,7 @@ describe("addHoldings method tests", () => {
       "PLTR"
     );
     expect(getItem).toBeCalled();
-    expect(updateItem).toBeCalled();
+    expect(setItem).toBeCalled();
     expect(returnValue).toEqual(true);
   });
 
@@ -108,40 +112,4 @@ describe("addHoldings method tests", () => {
   );
 });
 
-describe("inputValidator method tests", () => {
-  const setInputProperties = jest.fn();
-  var inputProperties = { value: "", validation: false, errorMessage: "" };
 
-  it("Should show no error message(call with correct parameters)", () => {
-    inputValidator(1, inputProperties, setInputProperties);
-    expect(setInputProperties).toBeCalledWith({
-      value: 1,
-      validation: true,
-      errorMessage: "",
-    });
-  });
-  it("Should show 'This field cannot be empty' as error message", () => {
-    inputValidator("", inputProperties, setInputProperties);
-    expect(setInputProperties).toBeCalledWith({
-      value: "",
-      validation: false,
-      errorMessage: "This field cannot be empty",
-    });
-  });
-  it("Should show 'Number should be bigger than 0' as error message", () => {
-    inputValidator(-5, inputProperties, setInputProperties);
-    expect(setInputProperties).toBeCalledWith({
-      value: -5,
-      validation: false,
-      errorMessage: "Number should be bigger than 0",
-    });
-  });
-  it("Should show 'Only numbers accepted' as error message", () => {
-    inputValidator("word", inputProperties, setInputProperties);
-    expect(setInputProperties).toBeCalledWith({
-      value: "word",
-      validation: false,
-      errorMessage: "Only numbers accepted",
-    });
-  });
-});

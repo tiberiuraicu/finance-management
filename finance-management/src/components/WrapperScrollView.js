@@ -7,7 +7,7 @@ const WrapperScrollView = (props) => {
     <View style={styles.wrapperView}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        style={styles.wrapperScrollView}
+        style={{...styles.wrapperScrollView, ...props.style}}
       >
         {props.children}
       </ScrollView>

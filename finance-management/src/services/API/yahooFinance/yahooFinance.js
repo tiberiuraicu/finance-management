@@ -12,7 +12,7 @@ export const getQuote = async (symbols, fields) => {
   }
 };
 
-// @info : gets the share price and the short name for a list fo symbols
+// @info : gets the share price and the short name for a list of symbols
 // @returns array which contains an object for
 // each symbol (which contain the name and the price)
 export const getSharesNamesAndPrices = async (symbols) => {
@@ -32,4 +32,16 @@ export const getSharesNamesAndPrices = async (symbols) => {
     console.log(error);
   }
   return namesAndPrices;
+};
+
+// @info : searches for a specific word on yahoofinance
+// @returns a JSON with the result
+export const search = async (searchTerm) => {
+  let result = null;
+  try {
+    result = await yahooFinance.search(searchTerm, { newsCount: 0 });
+  } catch (error) {
+    console.error(error);
+  }
+  return result;
 };

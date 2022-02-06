@@ -12,7 +12,7 @@ describe("yahoo finance API tests", () => {
       "AAPL",
     ]);
     expect(Object.keys(result).length).toBe(3);
-    
+
     expect(typeof result["TSLA"].name).toBe("string");
     expect(typeof result["TSLA"].price).toBe("number");
 
@@ -21,6 +21,9 @@ describe("yahoo finance API tests", () => {
 
     expect(typeof result["AAPL"].name).toBe("string");
     expect(typeof result["AAPL"].price).toBe("number");
-
+  });
+  it("should give a return for the search term", async () => {
+    const results = await yahooFinance.search("TSLA")
+    expect(results.quotes).not.toBeNull();
   });
 });

@@ -5,3 +5,10 @@ export const inputModel = () => {
     errorMessage: "",
   };
 };
+
+export const transactionModel = (price, numberOfShares) => {
+  return {
+    price: price,
+    numberOfShares: numberOfShares,
+  };
+};

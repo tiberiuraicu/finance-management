@@ -13,7 +13,9 @@ export const addHoldings = async (transaction, symbol) => {
         symbol: symbol,
         transactions: [],
       };
-      var portfolioFromStorage = await storage.default.getItem(PORTFOLIO);
+
+      var portfolioFromStorage = await storage.getItem(PORTFOLIO);
+
       // if the protofolio object already exists replace the empty one
       // declared at the start of the method with the one from storage
       if (portfolioFromStorage !== null) portfolio = portfolioFromStorage;
@@ -27,12 +29,14 @@ export const addHoldings = async (transaction, symbol) => {
         share.transactions.push(transaction);
         // add the share object to portfolio
         portfolio[symbol] = share;
-      }
-      //update the portfolio object in storage
-      await storage.default.updateItem(PORTFOLIO, portfolio);
 
+      }
+      //set the portfolio object in storage
+      await storage.setItem(PORTFOLIO, portfolio);
       return true;
     } catch (exception) {
+      console.error(exception)
+
       return false;
     }
   else return false;
@@ -50,37 +54,6 @@ const transactionIsValid = (transaction, symbol) => {
   else return false;
 };
 
-export const inputValidator = (
-  valueToBeTested,
-  inputProperties,
-  setInputProperties
-) => {
-  // regex which allows just numbers and "."
-  const re = /^[0-9]*\.?[0-9]*$/;
-  if (valueToBeTested === "") {
-    inputProperties = {
-      ...inputProperties,
-      validation: false,
-      errorMessage: "This field cannot be empty",
-    };
-  } else if (valueToBeTested <= 0) {
-    inputProperties = {
-      ...inputProperties,
-      validation: false,
-      errorMessage: "Number should be bigger than 0",
-    };
-  } else if (!re.test(valueToBeTested)) {
-    inputProperties = {
-      ...inputProperties,
-      validation: false,
-      errorMessage: "Only numbers accepted",
-    };
-  } else {
-    inputProperties = {
-      ...inputProperties,
-      validation: true,
-      errorMessage: "",
-    };
-  }
-  setInputProperties({ ...inputProperties, value: valueToBeTested });
-};
+
+
+
