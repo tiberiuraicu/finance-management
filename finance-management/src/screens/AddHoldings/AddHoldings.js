@@ -68,9 +68,9 @@ const AddHoldings = () => {
 
       // if the transaction was added successfully
       if (result)
-        // show transaction added allert
+        // show transaction added alert
         Alert.alert("", "Transaction added");
-      // else show transactuon failed
+      // else show transaction failed
       else Alert.alert("", "Transaction failed");
     }
   };

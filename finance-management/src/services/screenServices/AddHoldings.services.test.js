@@ -5,7 +5,6 @@ jest.mock("../storage/asyncStorage", () => ({
 }));
 import {
   addHoldings,
-  getShareNamesAndSymbolsForSearchTerm,
 } from "./AddHoldings.services.js";
 
 import { getItem, updateItem,setItem } from "../storage/asyncStorage";

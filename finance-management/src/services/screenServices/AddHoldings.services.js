@@ -33,6 +33,8 @@ export const addHoldings = async (transaction, symbol) => {
       }
       //set the portfolio object in storage
       await storage.setItem(PORTFOLIO, portfolio);
+      console.log(await storage.getItem(PORTFOLIO));
+
       return true;
     } catch (exception) {
       console.error(exception)
