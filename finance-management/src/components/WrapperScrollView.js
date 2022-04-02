@@ -6,6 +6,7 @@ const WrapperScrollView = (props) => {
   return (
     <View style={styles.wrapperView}>
       <ScrollView
+      keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}
         style={{...styles.wrapperScrollView, ...props.style}}
       >

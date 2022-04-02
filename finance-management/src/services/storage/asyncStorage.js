@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PORTFOLIO } from "../../util/constants/constants";
 
 // @info : stores a value/object to memory
 export const setItem = async (key, value) => {
@@ -21,6 +22,9 @@ export const getItem = async (key) => {
 export const removeItem = async (key) => {
   try {
     await AsyncStorage.removeItem(key);
+    var portofolio = await getItem(PORTFOLIO);
+    delete portofolio[key];
+    await setItem(PORTFOLIO, portofolio);
   } catch (error) {
     console.log(error);
   }

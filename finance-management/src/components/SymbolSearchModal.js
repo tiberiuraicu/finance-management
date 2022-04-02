@@ -40,19 +40,25 @@ export const SymbolSearchModal = (props) => {
           style={{
             height: "100%",
             backgroundColor: "#F2FCFE",
-            paddingTop: "5%",
+          
           }}
         >
-          <TextInputCustom
-            autoFocus={true}
-            placeholder=" Search term"
-            onChangeText={setSearchResultsHandler}
-          />
-          <ListForSearch
-            onPress={onItemPress}
-            data={searchResults}
-          ></ListForSearch>
-
+          <View
+            style={{
+              height: "60%",
+              paddingTop: "7%",
+            }}
+          >
+            <TextInputCustom
+              autoFocus={true}
+              placeholder=" Search term"
+              onChangeText={setSearchResultsHandler}
+            />
+            <ListForSearch
+              onPress={onItemPress}
+              data={searchResults}
+            ></ListForSearch>
+          </View>
         </View>
       </TouchableOpacity>
     </Modal>

@@ -10,7 +10,6 @@ export const getShareNamesAndSymbolsForSearchTerm = async (searchTerm) => {
   if (searchTerm === "") return symbolAndName;
 
   try {
-
     // gets the result from search
     let searchResult = await search(searchTerm);
 

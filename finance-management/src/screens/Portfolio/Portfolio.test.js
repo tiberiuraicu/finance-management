@@ -8,6 +8,10 @@ const createTestProps = (props) => ({
   },
   ...props,
 });
+jest.mock("@react-navigation/native", () => ({
+  useIsFocused: jest.fn(),
+}));
+
 
 describe("Protfolio screen tests", () => {
   it("renders the component", () => {
@@ -19,6 +23,6 @@ describe("Protfolio screen tests", () => {
     const wrapper = mount(<Portfolio {...props} />);
 
     wrapper.find(TouchableOpacity).first().simulate('click')
-    expect(props.navigation.navigate).toHaveBeenCalledWith("AddHoldings"); // SUCCESS
+    expect(props.navigation.navigate).toHaveBeenCalledWith("AddHoldings", {"isAddHolding": true}); // SUCCESS
   });
 });

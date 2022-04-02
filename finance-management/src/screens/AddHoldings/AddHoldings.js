@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   useWindowDimensions,
@@ -21,10 +21,18 @@ import styles, { searchTermInputText } from "./AddHoldings.style";
 import { inputModel, transactionModel } from "../../util/models";
 
 //importing services
-import { addHoldings } from "../../services/screenServices/AddHoldings.services";
+import {
+  addHoldings,
+  editHoldings,
+} from "../../services/screenServices/AddHoldings.services";
 import { inputValidator } from "../../services/general/InputValidation";
 
-const AddHoldings = () => {
+import { useIsFocused } from "@react-navigation/native";
+
+const AddHoldings = ({ route, navigation }) => {
+  const isFocused = useIsFocused();
+
+  const { isAddHolding, symbolForEdit } = route.params;
   // get the window height
   const windowHeight = useWindowDimensions().height;
 
@@ -66,14 +74,30 @@ const AddHoldings = () => {
       //calls the addHoldings method
       let result = await addHoldings(transaction, symbol.value);
 
-      // if the transaction was added successfully
-      if (result)
-        // show transaction added alert
-        Alert.alert("", "Transaction added");
-      // else show transaction failed
+      if (result) Alert.alert("", "Transaction added");
       else Alert.alert("", "Transaction failed");
     }
   };
+
+  const editHoldingsHandler = async () => {
+    // if the values from every field are correct
+    if (symbol.validation && price.validation && numberOfShares.validation) {
+      // creates a new transaction object
+      const transaction = transactionModel(price.value, numberOfShares.value);
+
+      //calls the editHoldings method
+      let result = await editHoldings(transaction, symbol.value);
+
+      if (result) Alert.alert("", "Holding updated");
+      else Alert.alert("", "Update failed");
+    }
+  };
+  useEffect(() => {
+    if (!isAddHolding) {
+      setSymbol({ value: symbolForEdit, validation: true });
+    }
+  }, [isFocused]);
+
   return (
     <WrapperScrollView>
       {/* the view which contains the inputs */}
@@ -85,12 +109,15 @@ const AddHoldings = () => {
           minHeight: Math.round(windowHeight / 1.5),
         }}
       >
+        <Text style={styles.title}>
+          {isAddHolding ? "New transaction" : "Edit holding"}
+        </Text>
         {/* looks like an input
          => when it is pressed a modal appears
             which lets the user search for a share */}
         <TouchableOpacity
           onPress={() => {
-            setSearchModalVisibility(true);
+            if (isAddHolding) setSearchModalVisibility(true);
           }}
           style={styles.searchTermInput}
         >
@@ -144,11 +171,17 @@ const AddHoldings = () => {
           {numberOfShares.errorMessage}
         </ErrorMessage>
 
-        {/* adds the transaction to portfolio */}
-        <CustomButton
-          text="ADD HOLDING"
-          onPress={addHoldingsHandler}
-        ></CustomButton>
+        {isAddHolding ? (
+          <CustomButton
+            text="ADD HOLDING"
+            onPress={addHoldingsHandler}
+          ></CustomButton>
+        ) : (
+          <CustomButton
+            text="EDIT HOLDING"
+            onPress={editHoldingsHandler}
+          ></CustomButton>
+        )}
       </View>
     </WrapperScrollView>
   );

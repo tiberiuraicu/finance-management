@@ -29,19 +29,48 @@ export const addHoldings = async (transaction, symbol) => {
         share.transactions.push(transaction);
         // add the share object to portfolio
         portfolio[symbol] = share;
-
       }
       //set the portfolio object in storage
       await storage.setItem(PORTFOLIO, portfolio);
-      console.log(await storage.getItem(PORTFOLIO));
 
       return true;
     } catch (exception) {
-      console.error(exception)
+      console.error(exception);
 
       return false;
     }
   else return false;
+};
+
+// @info : adds a new holding to the user's portfolio
+// @param :
+//      - transaction : json object which contains the price and the number of shares bought
+//      - symbol : share symbol
+export const editHoldings = async (transaction, symbol) => {
+  if (transactionIsValid(transaction, symbol)) {
+    try {
+      var share = {
+        symbol: symbol,
+        transactions: [],
+      };
+
+      var portfolio = await storage.getItem(PORTFOLIO);
+
+      // add transaction to the share object
+      share.transactions.push(transaction);
+      // add the share object to portfolio
+      portfolio[symbol] = share;
+
+      //set the portfolio object in storage
+      await storage.setItem(PORTFOLIO, portfolio);
+
+      return true;
+    } catch (exception) {
+      console.error(exception);
+
+      return false;
+    }
+  } else return false;
 };
 
 const transactionIsValid = (transaction, symbol) => {
@@ -55,7 +84,3 @@ const transactionIsValid = (transaction, symbol) => {
     return true;
   else return false;
 };
-
-
-
-

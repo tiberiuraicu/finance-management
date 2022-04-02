@@ -46,7 +46,7 @@ describe("getDisplayPropertiesForAllShares method tests", () => {
     expect(shareDisplayParameters.length).toEqual(2);
   });
   it("returns 0 as protfolio value and an empty array as display parameters when an error occurs", async () => {
-    expect(await getDisplayPropertiesForAllShares()).toEqual([0, [1]]);
+    expect(await getDisplayPropertiesForAllShares()).toEqual([0, []]);
   });
 
   it("returns 0 as protfolio value and an empty array as display parameters when the portfolio object is undefined", async () => {

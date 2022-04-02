@@ -2,6 +2,7 @@ import { getSharesNamesAndPrices } from "../API/yahooFinance/yahooFinance";
 import * as storage from "../storage/asyncStorage.js";
 import { PORTFOLIO } from "../../util/constants/constants";
 import { initializeShareDisplayParameters } from "../../util/models";
+import { getRatesForCoin } from "../API/curencyConverter/currencyConverter";
 
 // @info : calculates the following values for each
 // share in portfolio : shareTotalValue, shareTotalProfit,
@@ -25,21 +26,22 @@ export async function getDisplayPropertiesForAllShares() {
 
       // gets the name and current price for every share in portfolio
       let sharesNamesAndPrices = await getSharesNamesAndPrices(symbols);
-
+console.log(sharesNamesAndPrices)
       // iterate trough every share object
       for (var index in symbols) {
         // create an object containing all the needed
         // display values for a specific share
         var shareDisplayParametersObject = initializeShareDisplayParameters(
-          index,
+          symbols[index],
           sharesNamesAndPrices[symbols[index]].name,
           sharesNamesAndPrices[symbols[index]].price
         );
 
         // calculate the display values for a specific share
-        shareDisplayParametersObject = calculateShareDisplayParameters(
+        shareDisplayParametersObject = await calculateShareDisplayParameters(
           portofolio[symbols[index]],
-          shareDisplayParametersObject
+          shareDisplayParametersObject,
+          sharesNamesAndPrices[symbols[index]].currency
         );
 
         // add the object with the calculated
@@ -48,25 +50,25 @@ export async function getDisplayPropertiesForAllShares() {
 
         // add the share value(invested + profit)
         // to the portfolio value
-        portofolioValue =
-          portofolioValue + shareDisplayParametersObject.shareTotalValue;
+        portofolioValue += shareDisplayParametersObject.shareTotalValue;
       }
     }
     // return the portfolio value with 2 decimals
     // and the shares to be displayed(if any)
-    return [Number(portofolioValue.toFixed(2)), displaySharesArray];
+    return [portofolioValue, displaySharesArray];
   } catch (exception) {
     console.log(exception);
-    return [0, [1]];
+    return [0, []];
   }
 }
 
 // @info : calculates the display parameters for a specific share
 // by iterating trough every transaction added by the user
 // @returns : an object containing the calculated display parameters
-const calculateShareDisplayParameters = (
+const calculateShareDisplayParameters = async (
   shareFromStorage,
-  shareDisplayParametersObject
+  shareDisplayParametersObject,
+  currency
 ) => {
   // iterate trough the share transactions array
   shareFromStorage.transactions.map((transaction) => {
@@ -91,15 +93,27 @@ const calculateShareDisplayParameters = (
       shareDisplayParametersObject.totalSharesOwned;
   });
 
+  let currencyRate = 1;
+
+  if (currency !== "USD") {
+    currencyRate = await getRatesForCoin(currency, "USD");
+    currencyRate = currencyRate.rates.USD;
+  }
+
   // calculates the total value for the current share
   shareDisplayParametersObject.shareTotalValue =
     shareDisplayParametersObject.totalSharesOwned *
-    shareDisplayParametersObject.currentPrice;
+    shareDisplayParametersObject.currentPrice *
+    currencyRate;
 
   // calculates the total profit for the current share
   shareDisplayParametersObject.shareTotalProfit +=
     shareDisplayParametersObject.shareTotalValue -
-    shareDisplayParametersObject.totalMoneyInvested;
+    shareDisplayParametersObject.totalMoneyInvested * currencyRate;
 
   return shareDisplayParametersObject;
+};
+
+export const deleteAssetFromPortfolio = async (symbol) => {
+  await storage.removeItem(symbol);
 };
